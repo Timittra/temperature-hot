@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url(images/bg-image.jpg) no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form class="col-md-6 m-auto py-5">
+            <div class="input-group mb-3">
+                <input id="place" type="text" class="form-control" placeholder="Enter a location for Weather ...">
+                <div class="input-group-append">
+                    <button onclick="weather()" type="button" class="btn btn-danger">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="weather-status text-white text-center">
+            <img id="icon" src="https://openweathermap.org/img/wn/02d@2x.png" alt="">
+            <h1 id="location">Dhaka</h1>
+            <h3><span id="temperature">38.06</span>&deg;C</h3>
+            <h1 id="status" class="lead">Clouds</h1>
+            <h1 id="message"></h1>
+        </div>
+        <script>
+            function weather() {
+                const showWeather = document.getElementById("place").value;
+                let message = document.getElementById('message');
+                fetch(
+                        `http://api.openweathermap.org/data/2.5/weather?q=${showWeather}&appid=0fe7d14dc8ab9bb3f38b441498a5451d`
+                    )
+                    .then(res => res.json())
+                    .then(data => {
+                        showIcon(data);
+                        showLocation(data);
+                        showTemperature(data);
+                        showStatus(data);
+                    })
+                    .catch(error =>{
+                        message.innerText = "Unknown place! Not found.";
+                    });
+                    document.getElementById('place').value = "";
+                    message.innerText = "";
+            }
+
+            // display location
+            function showLocation(data) {
+                const cityName = data.name;
+                document.getElementById("location").innerText = cityName || 'Unknown';
+            }
+
+            // display temperature
+            function showTemperature(data) {
+                const temperature = data.main.temp;
+                document.getElementById("temperature").innerText = temperature;
+            }
+
+            // display status
+            function showStatus(data) {
+                const status = data.weather[0].main;
+                document.getElementById("status").innerText = status;
+            }
+
+            // display icon
+            function showIcon(data) {
+                const iconUrl = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+                document.getElementById("icon").setAttribute('src', iconUrl);
+            }
+        </script>
+    </div>
+
+</body>
+
+</html>
