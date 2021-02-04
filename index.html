@@ -39,9 +39,7 @@
             function weather() {
                 const showWeather = document.getElementById("place").value;
                 let message = document.getElementById('message');
-                fetch(
-                        `http://api.openweathermap.org/data/2.5/weather?q=${showWeather}&appid=0fe7d14dc8ab9bb3f38b441498a5451d`
-                    )
+                fetch("https://api.openweathermap.org/data/2.5/weather?q=" +showWeather+ "&appid=0fe7d14dc8ab9bb3f38b441498a5451d")
                     .then(res => res.json())
                     .then(data => {
                         showIcon(data);
@@ -59,13 +57,14 @@
             // display location
             function showLocation(data) {
                 const cityName = data.name;
-                document.getElementById("location").innerText = cityName || 'Unknown';
+                document.getElementById("location").innerText = cityName;
             }
 
             // display temperature
             function showTemperature(data) {
                 const temperature = data.main.temp;
-                document.getElementById("temperature").innerText = temperature;
+                const degreeTemperature = (temperature - 273.15).toFixed(1);
+                document.getElementById("temperature").innerText = degreeTemperature;
             }
 
             // display status
@@ -76,8 +75,9 @@
 
             // display icon
             function showIcon(data) {
-                const iconUrl = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
-                document.getElementById("icon").setAttribute('src', iconUrl);
+                const icon = data.weather[0].icon;
+                const iconUrl = "https://openweathermap.org/img/wn/"+icon+"@2x.png";
+                document.getElementById("icon").src = iconUrl;
             }
         </script>
     </div>
